@@ -9,8 +9,7 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-@Data
-@ToString
+@Data @Builder
 public class BaseEntity {
     @Column(updatable = false)
     private LocalDateTime createdAt;
