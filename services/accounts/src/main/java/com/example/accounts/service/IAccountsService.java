@@ -4,6 +4,8 @@ import com.example.accounts.dto.CustomerDto;
 
 public interface IAccountsService {
     void createAccount(CustomerDto customerDto);
-    void updateAccount(CustomerDto customerDto);
-    void deleteAccount(Long customerId);
+    CustomerDto fetchAccount(String mobileNumber);
+    boolean updateAccount(CustomerDto customerDto);
+    boolean deleteAccount(Long customerId);
+
 }
