@@ -33,11 +33,7 @@ public class AccountsServiceImpl implements IAccountsService {
         }
 
         Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
-
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("API");
         Customer savedCustomer =  customerRepository.save(customer);
-
         accountsRepository.save(createNewAccount(savedCustomer));
     }
 
@@ -51,8 +47,6 @@ public class AccountsServiceImpl implements IAccountsService {
         newAccount.setAccountNumber(randomAccNumber);
         newAccount.setAccountType(AccountsConstants.SAVINGS);
         newAccount.setBranchAddress(AccountsConstants.ADDRESS);
-        newAccount.setCreatedAt(LocalDateTime.now());
-        newAccount.setCreatedBy("API");
         return newAccount;
     }
 
@@ -86,7 +80,7 @@ public class AccountsServiceImpl implements IAccountsService {
             Customer customer = customerRepository.findById(customerId)
                     .orElseThrow(() -> new ResourceNotFoundException("Customer", "CustomerId",
                             customerId.toString()));
-            CustomerMapper.mapToCustomer(customerDto, customer);
+            CustomerMapper.mapToCustomer(customerDto, customer) ;
             customerRepository.save(customer);
 
             isUpdated = true;
