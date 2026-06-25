@@ -5,7 +5,7 @@ import com.example.loan.entity.Loan;
 
 public class LoanMapper {
 
-    public static LoanDto mapToLoansDto(Loan loan, LoanDto loanDto) {
+    public static LoanDto mapToLoanDto(Loan loan, LoanDto loanDto) {
         loanDto.setLoanNumber(loan.getLoanNumber());
         loanDto.setLoanType(loan.getLoanType());
         loanDto.setMobileNumber(loan.getMobileNumber());
@@ -15,7 +15,7 @@ public class LoanMapper {
         return loanDto;
     }
 
-    public static Loan mapToLoans(LoanDto loansDto, Loan loan) {
+    public static Loan mapToLoan(LoanDto loansDto, Loan loan) {
         loan.setLoanNumber(loansDto.getLoanNumber());
         loan.setLoanType(loansDto.getLoanType());
         loan.setMobileNumber(loansDto.getMobileNumber());
