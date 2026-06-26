@@ -2,7 +2,7 @@
 FROM eclipse-temurin:21-jdk
 
 # Add the application's jar to the image
-COPY target/account-0.0.1-SNAPSHOT.jar account-0.0.1-SNAPSHOT.jar
+COPY target/loan-0.0.1-SNAPSHOT.jar loan-0.0.1-SNAPSHOT.jar
 
 # execute the application
-ENTRYPOINT ["java", "-jar", "account-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "loan-0.0.1-SNAPSHOT.jar"]
