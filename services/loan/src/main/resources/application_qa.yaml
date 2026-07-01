@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: "qa"
+
+build:
+  version: "2.0"
+
+account:
+  message: "Welcome to Bank loan related QA APIs "
+  contactDetails:
+    name: "Trung hiep - QA Lead"
+    email: "phamtrunghiep1201@gmail.com"
+  onCallSupport:
+    - 0991234567
+    - 0991234569

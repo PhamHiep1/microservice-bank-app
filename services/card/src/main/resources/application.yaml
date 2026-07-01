@@ -14,3 +14,21 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  config:
+    import:
+      - "application_qa.yaml"
+      - "application_prod.yaml"
+  profiles:
+    active: "qa"
+
+build:
+  version: "3.0"
+
+account:
+  message: "Welcome to Bank card related local APIs "
+  contactDetails:
+    name: "Trung hiep - Developer"
+    email: "phamtrunghiep1201@gmail.com"
+  onCallSupport:
+    - 0991234567
+    - 0991234569
