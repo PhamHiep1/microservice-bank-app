@@ -1,0 +1,11 @@
+build:
+  version: "3.0"
+
+account:
+  message: "Welcome to Bank account related local APIs "
+  contactDetails:
+    name: "Trung hiep - Developer"
+    email: "phamtrunghiep1201@gmail.com"
+  onCallSupport:
+    - 0991234567
+    - 0991234569

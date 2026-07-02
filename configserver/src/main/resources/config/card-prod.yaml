@@ -1,13 +1,8 @@
-spring:
-  config:
-    activate:
-      on-profile: "prod"
-
 build:
   version: "1.0"
 
-account:
-  message: "Welcome to Bank loan related Prod APIs "
+card:
+  message: "Welcome to Bank card related Prod APIs "
   contactDetails:
     name: "Trung hiep - Product Owner"
     email: "phamtrunghiep1201@gmail.com"

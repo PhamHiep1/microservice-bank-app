@@ -3,6 +3,10 @@ api:
 server:
   port: 8080
 spring:
+  application:
+    name: account
+  profiles:
+    active: prod
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
@@ -17,21 +21,4 @@ spring:
       ddl-auto: update
     show-sql: true
   config:
-    import:
-      - "application_qa.yaml"
-      - "application_prod.yaml"
-  profiles:
-    active: "qa"
-
-
-build:
-  version: "3.0"
-
-account:
-  message: "Welcome to Bank account related local APIs "
-  contactDetails:
-    name: "Trung hiep - Developer"
-    email: "phamtrunghiep1201@gmail.com"
-  onCallSupport:
-    - 0991234567
-    - 0991234569
+    import: "optional:configserver:http://localhost:8071"

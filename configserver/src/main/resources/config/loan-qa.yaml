@@ -1,12 +1,7 @@
-spring:
-  config:
-    activate:
-      on-profile: "qa"
-
 build:
   version: "2.0"
 
-account:
+loan:
   message: "Welcome to Bank loan related QA APIs "
   contactDetails:
     name: "Trung hiep - QA Lead"

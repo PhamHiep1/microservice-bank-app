@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path="${api.prefix}", produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 @Validated
-public class AccountsController {
+public class AccountController {
     private final IAccountService iAccountService;
 
     @Value("${build.version}")

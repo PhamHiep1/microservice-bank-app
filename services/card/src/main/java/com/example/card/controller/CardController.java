@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
         description = "CRUD REST APIs in Bank to CREATE, UPDATE, FETCH AND DELETE card details"
 )
 @RestController
-@RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path = "${api.prefix}", produces = {MediaType.APPLICATION_JSON_VALUE})
 @RequiredArgsConstructor
 @Validated
 public class CardController {
