@@ -1,0 +1,106 @@
+services:
+  rabbit:
+    image: "rabbitmq:3.13-management"
+    container_name: "rabbitmq-broker"
+    hostname: "rabbitmq"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      # Lệnh kiểm tra sức khỏe
+      test: [ "CMD-SHELL", "rabbitmq-diagnostics -q ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - bank
+
+
+  configserver:
+    image: "phamhiep1/configserver:v2"
+    container_name: configserver-ms
+    ports:
+      - "8071:8071"
+    environment:
+      SPRING_RABBITMQ_HOST: "rabbitmq"
+    healthcheck:
+      # Gọi endpoint Readiness của Actuator và dùng grep lọc chữ "UP"
+      test: ["CMD-SHELL", "curl -f http://localhost:8071/actuator/health/readiness | grep UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - bank
+
+
+  account:
+    image: "phamhiep1/account:v2"
+    container_name: account-ms
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - bank
+    environment:
+      # Trỏ URL sang tên dịch vụ "configserver" thay vì localhost
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071"
+      SPRING_PROFILES_ACTIVE: "default"
+      SPRING_APPLICATION_NAME: "account"
+    depends_on:
+      configserver:
+        condition: service_healthy # Chỉ chạy khi Config Server đã trả về trạng thái UP
+
+
+  loan:
+    image: "phamhiep1/loan:v2"
+    container_name: loan-ms
+    ports:
+      - "8090:8090"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - bank
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071"
+      SPRING_PROFILES_ACTIVE: "default"
+      SPRING_APPLICATION_NAME: "loan"
+    depends_on:
+      configserver:
+        condition: service_healthy
+
+  card:
+    image: "phamhiep1/card:v2"
+    container_name: card-ms
+    ports:
+      - "9000:9000"
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - bank
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071"
+      SPRING_PROFILES_ACTIVE: "default"
+      SPRING_APPLICATION_NAME: "card"
+    depends_on:
+      configserver:
+        condition: service_healthy
+
+networks:
+  bank:
+    driver: "bridge"
