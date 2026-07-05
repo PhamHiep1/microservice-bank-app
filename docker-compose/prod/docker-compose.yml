@@ -48,7 +48,7 @@ services:
         condition: service_healthy # Chỉ chạy khi Config Server đã trả về trạng thái UP
     environment:
       SPRING_APPLICATION_NAME: "account"
-      SPRING_PROFILES_ACTIVE: default
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: "optional:configserver:http://configserver:8071/"
     extends:
       file: common-config.yml
@@ -64,7 +64,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "loan"
-      SPRING_PROFILES_ACTIVE: default
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: "optional:configserver:http://configserver:8071/"
     extends:
       file: common-config.yml
@@ -80,7 +80,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "card"
-      SPRING_PROFILES_ACTIVE: default
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: "optional:configserver:http://configserver:8071/"
     extends:
       file: common-config.yml

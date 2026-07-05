@@ -1,7 +1,6 @@
 api:
   prefix: "/api"
 server:
-
   port: 9000
 spring:
   application:
@@ -22,7 +21,7 @@ spring:
       ddl-auto: update
     show-sql: true
   config:
-    import: "configserver:http://localhost:8071"
+    import: "optional:configserver:http://localhost:8071"
   rabbitmq:
     host: localhost
     port: 5672
