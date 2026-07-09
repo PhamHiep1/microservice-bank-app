@@ -1,31 +1,59 @@
 services:
-  rabbit:
-    image: "rabbitmq:4-management"
-    container_name: "rabbitmq-broker"
-    hostname: "rabbitmq"
+  #  rabbit:
+  #    image: "rabbitmq:4-management"
+  #    container_name: "rabbitmq-broker"
+  #    hostname: "rabbitmq"
+  #    ports:
+  #      - "5672:5672"
+  #      - "15672:15672"
+  #    healthcheck:
+  #      # Lệnh kiểm tra sức khỏe
+  #      test: rabbitmq-diagnostics check_port_connectivity
+  #      interval: 10s
+  #      timeout: 5s
+  #      retries: 10
+  #      start_period: 10s
+  #    extends:
+  #      file: common-config.yml
+  #      service: network-deploy-service
+
+  accountdb:
+    container_name: accountdb
     ports:
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      # Lệnh kiểm tra sức khỏe
-      test: rabbitmq-diagnostics check_port_connectivity
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
+      - 3309:3306
+    environment:
+      MYSQL_DATABASE: accountdb
     extends:
       file: common-config.yml
-      service: network-deploy-service
+      service: microservice-db-config
+  loandb:
+    container_name: loandb
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: loandb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
 
+  carddb:
+    container_name: carddb
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_DATABASE: carddb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
 
   configserver:
     image: "phamhiep1/configserver:v2"
     container_name: configserver-ms
     ports:
       - "8071:8071"
-    depends_on:
-      rabbit:
-        condition: service_healthy
+    #    depends_on:
+    #      rabbit:
+    #        condition: service_healthy
     healthcheck:
       # Gọi endpoint Readiness của Actuator và dùng grep lọc chữ "UP"
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
@@ -39,49 +67,64 @@ services:
 
 
   account:
-    image: "phamhiep1/account:v2"
+    image: "phamhiep1/account:v3"
     container_name: account-ms
     ports:
       - "8080:8080"
     depends_on:
       configserver:
         condition: service_healthy # Chỉ chạy khi Config Server đã trả về trạng thái UP
+      accountdb:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "account"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://accountDB:3306/accountDB"
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: "optional:configserver:http://configserver:8071/"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
     extends:
       file: common-config.yml
       service: microservice-base-config
 
   loan:
-    image: "phamhiep1/loan:v2"
+    image: "phamhiep1/loan:v3"
     container_name: loan-ms
     ports:
       - "8090:8090"
     depends_on:
       configserver:
         condition: service_healthy
+      loandb:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "loan"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://loanDB:3306/loanDB"
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: "optional:configserver:http://configserver:8071/"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
     extends:
       file: common-config.yml
       service: microservice-base-config
 
   card:
-    image: "phamhiep1/card:v2"
+    image: "phamhiep1/card:v3"
     container_name: card-ms
     ports:
       - "9000:9000"
     depends_on:
       configserver:
         condition: service_healthy
+      carddb:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "card"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://cardDB:3306/cardDB"
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: "optional:configserver:http://configserver:8071/"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
     extends:
       file: common-config.yml
       service: microservice-base-config
