@@ -8,25 +8,28 @@ spring:
   profiles:
     active: prod
   datasource:
-    url: jdbc:h2:mem:carddb
-    driverClassName: org.h2.Driver
-    username: sa
-    password: ''
-  h2:
-    console:
-      enabled: true
+    url: jdbc:mysql://localhost:3308/cardDB
+    username: root
+    password: root
+    sql:
+      init:
+        mode: always
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        id:
+          db_structure_naming_strategy: legacy
   config:
     import: "optional:configserver:http://localhost:8071"
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: guest
+#    password: guest
 
 management:
   endpoints:
