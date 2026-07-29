@@ -1,35 +1,29 @@
 api:
-  prefix: /api
+  prefix: "/api"
+
 server:
   port: 8080
 spring:
   application:
-    name: account
+    name: "account"
   profiles:
-    active: prod
+    active: "prod"
   datasource:
-    url: jdbc:mysql://localhost:3309/accountDB
-    username: root
-    password: root
-    sql:
-      init:
-        mode: always
+    url: jdbc:h2:mem:accountdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        id:
-          db_structure_naming_strategy: legacy
   config:
-    import: "optional:configserver:http://localhost:8071"
-#  rabbitmq:
-#    host: localhost
-#    port: 5672
-#    username: guest
-#    password: guest
+    import: "optional:configserver:http://localhost:8071/"
+
 
 management:
   endpoints:
