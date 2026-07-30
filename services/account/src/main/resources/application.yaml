@@ -3,6 +3,7 @@ api:
 
 server:
   port: 8080
+
 spring:
   application:
     name: "account"
@@ -24,9 +25,31 @@ spring:
   config:
     import: "optional:configserver:http://localhost:8071/"
 
-
+# Config Actuator & Shutdown
 management:
   endpoints:
+    shutdown:
+      enabled: true
     web:
       exposure:
         include: "*"
+  info:
+    env:
+      enabled: true
+
+# Config Eureka Client
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+  instance:
+    preferIpAddress: true
+
+# Thông tin hiển thị lên Dashboard Eureka / Actuator Info Endpoint
+info:
+  app:
+    name: "account"
+    version: "1.0.0"
+    description: "Account Service"
