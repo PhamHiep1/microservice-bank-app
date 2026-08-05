@@ -1,7 +1,17 @@
 package com.example.account.controller;
 
-import com.example.account.dto.CustomerDetailDto;
+import com.example.account.dto.CustomerDetailsDto;
+import com.example.account.dto.ErrorResponseDto;
+import com.example.account.service.ICustomerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -10,15 +20,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(
+        name = "REST API for Customers in Bank",
+        description = "REST APIs in EazyBank to FETCH customer details"
+)
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
+@RequiredArgsConstructor
 public class CustomerController {
+    private final ICustomerService customerService;
+
+    @Operation(
+            summary = "Fetch Customer Details REST API",
+            description = "REST API to fetch Customer details based on a mobile number"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+    }
+    )
     @GetMapping("/fetchCustomerDetails")
-    public ResponseEntity<CustomerDetailDto> fetchCustomerDetails(
+    public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(
             @RequestParam @Pattern(regexp="(^$|[0-9]{10})", message = "Số điện thoại phải gồm 10 chữ số")
             String mobileNumber) {
 
-        return null;
+        CustomerDetailsDto customerDetailsDto = customerService.fetchCustomerDetails(mobileNumber);
+
+        return ResponseEntity.status(HttpStatus.OK).body(customerDetailsDto);
     }
 }
