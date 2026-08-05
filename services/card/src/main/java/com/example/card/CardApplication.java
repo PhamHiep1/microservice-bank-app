@@ -35,6 +35,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 				url = "https://github.com/PhamHiep1/microservice-bank-app"
 		)
 )
+
 public class CardApplication {
 
 	public static void main(String[] args) {

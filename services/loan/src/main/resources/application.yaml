@@ -28,11 +28,12 @@ spring:
 # Config Actuator & Shutdown
 management:
   endpoints:
-    shutdown:
-      enabled: true
     web:
       exposure:
         include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
   info:
     env:
       enabled: true
