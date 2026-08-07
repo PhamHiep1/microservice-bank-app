@@ -184,7 +184,7 @@
 				<version>3.5.1</version>
 				<configuration>
 					<to>
-						<image>phamhiep1/${project.artifactId}:v3</image>
+						<image>phamhiep1/${project.artifactId}:v4</image>
 					</to>
 				</configuration>
 			</plugin>
